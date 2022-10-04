@@ -2,6 +2,7 @@ package models;
 
 public class ModelLogin {
 
+	private Long idUser;
 	private String nome;
 	private String email;
 	private String login;
@@ -11,6 +12,16 @@ public class ModelLogin {
 		super();
 		// TODO Auto-generated constructor stub
 	}
+	
+	public boolean isNovo() {
+		if (this.idUser == null) {
+			return true;
+		} else if (this.idUser != null && this.idUser > 0) {
+			return false;
+		}
+		
+		return idUser == null;
+	}
 
 	public ModelLogin(String nome, String email, String login, String senha) {
 		super();
@@ -18,6 +29,16 @@ public class ModelLogin {
 		this.email = email;
 		this.login = login;
 		this.senha = senha;
+	}
+
+	
+	
+	public Long getIdUser() {
+		return idUser;
+	}
+
+	public void setIdUser(Long idUser) {
+		this.idUser = idUser;
 	}
 
 	public String getNome() {

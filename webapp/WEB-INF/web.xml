@@ -28,4 +28,14 @@
     <filter-name>FilterAutenticacao</filter-name>
     <url-pattern>/FilterAutenticacao</url-pattern>
   </filter-mapping>
+  <servlet>
+    <description></description>
+    <display-name>servletUsuarioController</display-name>
+    <servlet-name>servletUsuarioController</servlet-name>
+    <servlet-class>servlets.servletUsuarioController</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>servletUsuarioController</servlet-name>
+    <url-pattern>/servletUsuarioController</url-pattern>
+  </servlet-mapping>
 </web-app>

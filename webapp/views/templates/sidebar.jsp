@@ -42,14 +42,14 @@
                               <li class="pcoded-hasmenu">
                                   <a href="javascript:void(0)" class="waves-effect waves-dark">
                                       <span class="pcoded-micon"><i class="ti-layout-grid2-alt"></i></span>
-                                      <span class="pcoded-mtext"  data-i18n="nav.basic-components.main">Components</span>
+                                      <span class="pcoded-mtext"  data-i18n="nav.basic-components.main">Usuarios</span>
                                       <span class="pcoded-mcaret"></span>
                                   </a>
                                   <ul class="pcoded-submenu">
                                       <li class=" ">
-                                          <a href="accordion.html" class="waves-effect waves-dark">
+                                          <a href="./views/usuarios.jsp" class="waves-effect waves-dark">
                                               <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
-                                              <span class="pcoded-mtext" data-i18n="nav.basic-components.alert">Accordion</span>
+                                              <span class="pcoded-mtext" data-i18n="nav.basic-components.alert">Formulários</span>
                                               <span class="pcoded-mcaret"></span>
                                           </a>
                                       </li>
