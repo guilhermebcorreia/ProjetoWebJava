@@ -1,5 +1,6 @@
 package servlets;
 
+import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -13,7 +14,7 @@ import connection.Conexao;
 import dao.daoUsuarioRepository;
 
 /**
- * Servlet implementation class servletUsuarioController
+ * @WebServlet("/servletUsuarioController")
  */
 public class servletUsuarioController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
@@ -23,7 +24,7 @@ public class servletUsuarioController extends HttpServlet {
      * @see HttpServlet#HttpServlet()
      */
     public servletUsuarioController() {
-        super();
+//        super();
         // TODO Auto-generated constructor stub
     }
 
@@ -32,7 +33,7 @@ public class servletUsuarioController extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		response.getWriter().append("Served at: ").append(request.getContextPath());
+//		response.getWriter().append("Served at: ").append(request.getContextPath());
 	}
 
 	/**
@@ -41,6 +42,7 @@ public class servletUsuarioController extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
 		try {
+			String msg = "Usuário Cadastrado";
 			String idUser = request.getParameter("idUser");
 			String nome = request.getParameter("nomeUsuario");
 			String email = request.getParameter("emailUsuario");
@@ -55,10 +57,24 @@ public class servletUsuarioController extends HttpServlet {
 			modelLogin.setLogin(login);
 			modelLogin.setSenha(senha);
 			
-			daoUsuario.validarUsuario(modelLogin);
+			if (daoUsuario.validarUsuario(login)) {
+				msg = "Usuário já cadastrado. Tente outro";
+			} else { 
+					if (modelLogin.isNovo()) {
+					msg = "Usuário cadastrado.";
+				} else {
+					msg = "Usuário atualizado.";
+				}
+					modelLogin = daoUsuario.gravarUsuario(modelLogin);
+			}
 			
+			request.setAttribute("msg", msg);
+			request.setAttribute("modelLogin", modelLogin);
+			request.getRequestDispatcher("views/usuarios.jsp").forward(request, response);
 		} catch (Exception e) {
-			// TODO: handle exception
+			RequestDispatcher redirecionar = request.getRequestDispatcher("erro.jsp");
+			request.setAttribute("msg", e.getMessage());
+			redirecionar.forward(request, response);
 		}
 		
 		doGet(request, response);

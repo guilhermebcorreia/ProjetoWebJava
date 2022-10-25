@@ -24,7 +24,7 @@ public class FilterAutenticacao implements Filter {
      * @see HttpFilter#HttpFilter()
      */
     public FilterAutenticacao() {
-        super();
+//        super();
         // TODO Auto-generated constructor stub
     }
 
@@ -48,7 +48,7 @@ public class FilterAutenticacao implements Filter {
 			String urlOrigem = req.getServletPath();
 			
 			if (userLogin == null && !urlOrigem.equalsIgnoreCase("/views/ServletLogin")) {
-				RequestDispatcher redireciona = request.getRequestDispatcher("/index,jsp=" + urlOrigem);
+				RequestDispatcher redireciona = request.getRequestDispatcher("/index.jsp=" + urlOrigem);
 				
 				request.setAttribute("msg", "Efetuar login no sistema");
 				redireciona.forward(req, response);

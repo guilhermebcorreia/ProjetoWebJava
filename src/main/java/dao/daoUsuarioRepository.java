@@ -4,6 +4,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 import connection.Conexao;
 import models.ModelLogin;
@@ -18,7 +20,7 @@ public class daoUsuarioRepository {
 	
 	public ModelLogin gravarUsuario(ModelLogin usuario) throws Exception {
 		if (usuario.isNovo()) {
-			String sql = "inser into usuario(nome, email, login, senha) values (?, ?, ?, ?)";
+			String sql = "insert into usuario(nome, email, login, senha) values (?, ?, ?, ?)";
 			PreparedStatement stmt = conexao.prepareStatement(sql);
 			stmt.setString(1, usuario.getNome());
 			stmt.setString(2, usuario.getEmail());
@@ -26,7 +28,7 @@ public class daoUsuarioRepository {
 			stmt.setString(4, usuario.getSenha());
 			stmt.execute();
 		} else {
-			String sql = "update usuario set nome = ?, email = ?, login = ?, senha = ? where idUser";
+			String sql = "update usuario set nome = ?, email = ?, login = ?, senha = ? where idUser = ?";
 			
 			PreparedStatement stmt = conexao.prepareStatement(sql);
 			stmt.setString(1, usuario.getNome());
@@ -41,24 +43,34 @@ public class daoUsuarioRepository {
 		return this.consultarUsuario(usuario.getLogin());
 	}
 	
-	public boolean validarUsuario(ModelLogin model) throws Exception {
-		String sql = "SELECT * FROM usuario WHERE login = ? ";
+	public List<ModelLogin> consultaUsuarioList(String nome) throws Exception {
 		
+		List<ModelLogin> lista = new ArrayList<ModelLogin>();
+								
+		String sql = "select * from usuario where upper(nome) like upper(?)";
+				
 		PreparedStatement stmt = conexao.prepareStatement(sql);
 		
-		stmt.setLong(1, model.getIdUser());
-		stmt.setString(2, model.getNome());
-		stmt.setString(3, model.getEmail());
-		stmt.setString(4, model.getLogin());
-		stmt.setString(5, model.getSenha());
+		stmt.setString(1, "%" + nome + "%");
 		
-		ResultSet resultset = stmt.executeQuery();
+		ResultSet res = stmt.executeQuery();
 		
-		if (resultset.next()) {
-			return true;
-		} else {
-			return false;
+		while (res.next()) {
+			
+			ModelLogin modelLogin = new ModelLogin();
+			
+			modelLogin.setIdUser(res.getLong("iduser"));
+			modelLogin.setNome(res.getString("nome"));
+			modelLogin.setEmail(res.getString("email"));
+			modelLogin.setLogin(res.getString("login"));
+			modelLogin.setSenha(res.getString("senha"));
+			
+			lista.add(modelLogin);
+			
 		}
+		
+		return lista;
+		
 	}
 	
 	public ModelLogin consultarUsuario(String login) throws Exception{
@@ -79,6 +91,16 @@ public class daoUsuarioRepository {
 		}
 		
 		return modelLogin;
+	}
+	
+	public boolean validarUsuario(String login) throws SQLException {
+		String sql = "select count(1) > 0 as exist from usuario where upper(login) = upper('" + login + "');";
+		
+		PreparedStatement stmt = conexao.prepareStatement(sql);
+		ResultSet res = stmt.executeQuery();
+		res.next();
+		
+		return res.getBoolean("exist");
 	}
 	
 }
