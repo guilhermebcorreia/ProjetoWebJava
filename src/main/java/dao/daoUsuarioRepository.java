@@ -59,7 +59,7 @@ public class daoUsuarioRepository {
 			
 			ModelLogin modelLogin = new ModelLogin();
 			
-			modelLogin.setIdUser(res.getLong("iduser"));
+			modelLogin.setIdUser(res.getLong("idUser"));
 			modelLogin.setNome(res.getString("nome"));
 			modelLogin.setEmail(res.getString("email"));
 			modelLogin.setLogin(res.getString("login"));
@@ -101,6 +101,72 @@ public class daoUsuarioRepository {
 		res.next();
 		
 		return res.getBoolean("exist");
+	}
+	
+	public ModelLogin consultaUsuarioID(String id) throws Exception {
+			
+			ModelLogin modelLogin = new ModelLogin();
+			
+			String sql = "select * from usuario where idUser = ?";
+			
+			PreparedStatement stmt = conexao.prepareStatement(sql);
+			
+			stmt.setLong(1, Long.parseLong(id));
+			
+			ResultSet res = stmt.executeQuery();
+			
+			while (res.next()) {  // Verificar se tem resultado
+				
+				modelLogin.setIdUser(res.getLong("idUser"));
+				modelLogin.setNome(res.getString("nome"));
+				modelLogin.setEmail(res.getString("email"));
+				modelLogin.setLogin(res.getString("login"));
+				modelLogin.setSenha(res.getString("senha"));
+				
+			}
+			
+			return modelLogin;
+		}
+	
+	public void excluirUser(String idUser) throws Exception	{
+		
+		String sql = "delete from usuario where idUser = ?;";
+		
+		PreparedStatement stmt = conexao.prepareStatement(sql);
+		
+		stmt.setLong(1, Long.parseLong(idUser));
+		
+		stmt.executeUpdate();
+		
+		conexao.commit();
+
+	}
+	
+public List<ModelLogin> findAll() throws Exception {
+		
+		List<ModelLogin> lista = new ArrayList<ModelLogin>();
+								
+		String sql = "select * from usuario where 1 = 1";
+				
+		PreparedStatement stmt = conexao.prepareStatement(sql);
+		ResultSet res = stmt.executeQuery();
+		
+		while (res.next()) {
+			
+			ModelLogin modelLogin = new ModelLogin();
+			
+			modelLogin.setIdUser(res.getLong("idUser"));
+			modelLogin.setNome(res.getString("nome"));
+			modelLogin.setEmail(res.getString("email"));
+			modelLogin.setLogin(res.getString("login"));
+			modelLogin.setSenha(res.getString("senha"));
+			
+			lista.add(modelLogin);
+			
+		}
+		
+		return lista;
+		
 	}
 	
 }

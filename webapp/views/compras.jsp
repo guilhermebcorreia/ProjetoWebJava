@@ -39,46 +39,41 @@
                                            <div class="col-sm-12">
                                                 <div class="card">
                                                     <div class="card-header">
-                                                        <h5>Cadastro Usuario</h5>
+                                                        <h5>Cadastrar Compras</h5>
                                                         <!--<span>Add class of <code>.form-control</code> with <code>&lt;input&gt;</code> tag</span>-->
                                                     </div>
                                                     <div class="card-block">
-                                                        <form class="form-material" action="<%= request.getContextPath() %>/servletUsuarioController" method="post" id="formUser" >
+                                                        <form class="form-material" action="<%= request.getContextPath() %>/servletComprasController" method="post" id="formCompra" >
 												           	   
 												           	   <input type="hidden" name="acao" id="acao" value="">
 												           	   
 												           	   <div class="form-group form-default form-static-label">
-													           	   <label for="idUser">Cod Usuario</label>
+													           	   <label for="id">Cod Compras</label>
 													           	   <span class="form-bar"></span>
-													           	   <input type="text" id="idUser" name="idUser" class="form-control" readonly="readonly" value="${modelLogin.idUser}">
+													           	   <input type="text" id="idCompra" name="id" class="form-control" readonly="readonly" value="${compra.id}">
 												           	   </div>
-												               <div class="form-group form-default">
-												                   <input type="text" name="nomeUsuario" class="form-control" id="nomeUsuario" value="${modelLogin.nome}">
+												           	   <div class="form-group form-default">
+												                   <input type="text" name="nome" class="form-control" id="nomeCompra" value="${compra.nome}">
 												                   <span class="form-bar"></span>
-												                   <label class="float-label">Nome Completo</label>
+												                   <label class="float-label">Nome</label>
 												               </div>
 												               <div class="form-group form-default">
-												                   <input type="text" name="emailUsuario" class="form-control" id="emailUsuario" value="${modelLogin.email}">
+												                   <input type="number" name="valor" class="form-control" id="valorCompra" value="${compra.valor}">
 												                   <span class="form-bar"></span>
-												                   <label class="float-label">Email (example@gmail.com)</label>
+												                   <label class="float-label">Valor</label>
 												               </div>
 												               <div class="form-group form-default">
-												                   <input type="password" name="senhaUsuario" class="form-control" id="senhaUsuario" value="${modelLogin.senha}">
+												                   <textarea name="descricao" class="form-control" id="descricaoCompra" >${compra.descricao}</textarea>
 												                   <span class="form-bar"></span>
-												                   <label class="float-label">Senha</label>
+												                   <label class="float-label">Descreva a compra</label>
 												               </div>
-												              
-												               <div class="form-group form-default">
-												                   <input type="text" name="loginUsuario" class="form-control" id="loginUsuario" value="${modelLogin.login}">
-												                   <span class="form-bar"></span>
-												                   <label class="float-label">Login</label>
-												               </div>
+												               
 												              
 												              <div class="card-block"> 
 												                <button type="button" class="btn waves-effect waves-light btn-grd-primary">Novo</button>
                                                                 <button class="btn waves-effect waves-light btn-grd-info">Salvar</button>                                                               
-                                                                <button type="button" class="btn waves-effect waves-light btn-grd-danger" onclick="ExcluirUserAjax();">Excluir</button>
-													            <button type="button" class="btn waves-effect waves-light btn-grd-warning" data-toggle="modal" data-target="#ModalUsuario">Pesquisar</button>
+                                                                <button type="button" class="btn waves-effect waves-light btn-grd-danger" onclick="ExcluirCompraAjax();">Excluir</button>
+													            <button type="button" class="btn waves-effect waves-light btn-grd-warning" data-toggle="modal" data-target="#ModalCompra">Pesquisar</button>
 												               </div>
 											           </form>
                                                     </div>
@@ -99,11 +94,11 @@
     </div>
     
      <!-- Modal -->
-<div class="modal fade" id="ModalUsuario" tabindex="-1" role="dialog" aria-labelledby="ModalUsuario" aria-hidden="true">
+<div class="modal fade" id="ModalCompra" tabindex="-1" role="dialog" aria-labelledby="ModalCompra" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="ModalUsuario">Pesquisa de usuario</h5>
+        <h5 class="modal-title" id="ModalCompra">Pesquisa de Compra</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -113,7 +108,7 @@
       	<div class="input-group mb-3">
 		  <input type="text" class="form-control" placeholder="Nome" aria-label="nome" id="nomeBusca" aria-describedby="basic-addon2">
 		  <div class="input-group-append">
-		    <button class="btn btn-success" type="button" onclick="buscarUsuario();">Buscar</button>
+		    <button class="btn btn-success" type="button" onclick="buscarCompra();">Buscar</button>
 		  </div>
 		</div>
 		<div style="height:300px; overflow: scroll;">
@@ -147,26 +142,26 @@
 
 function verEditar(id){
 	
-	var urlAction = document.getElementById("formUser").action;
+	var urlAction = document.getElementById("formCompra").action;
 
-	window.location.href = urlAction + '?acao=editarUsuario&id='+id;
+	window.location.href = urlAction + '?acao=editarCompra&id='+id;
 	
 }
 
 
-function buscarUsuario(){
+function buscarCompra(){
 
 	var nomeBusca = document.getElementById("nomeBusca").value;
 
 	if (nomeBusca != null && nomeBusca != '' && nomeBusca.trim() != '' )  { //Validar que o camnpo possue um valor
 
-        var urlAction = document.getElementById("formUser").action;
+        var urlAction = document.getElementById("formCompra").action;
 
 	    $.ajax({
 
     	    method:"get",
     	    url: urlAction,
-    	    data : "nomeBusca=" + nomeBusca + "&acao=buscarUsuario",
+    	    data : "nomeBusca=" + nomeBusca + "&acao=buscarCompra",
     	    success: function(response){
 
         	    var json = JSON.parse(response);
@@ -177,15 +172,15 @@ function buscarUsuario(){
 
         	    for(var p = 0; p < json.length; p++){
 
-                   $('#tabelaresultados > tbody').append('<tr> <td>'+json[p].idUser+'</td><td>'+json[p].nome+
-                           '</td><td><button onClick="verEditar('+json[p].idUser+')" type="button" class=btn btn-info">Editar</button></td></tr>');
+                   $('#tabelaresultados > tbody').append('<tr> <td>'+json[p].id+'</td><td>'+json[p].nome+
+                           '</td><td><button onClick="verEditar('+json[p].id+')" type="button" class=btn btn-info">Editar</button></td></tr>');
             	}
 
         	    document.getElementById('totalResultados').textContent = 'Resultados: ' + json.length; 
     	    }
 
    	    }).fail(function(xhr, status, erroThrown){
-       	    alert('Erro ao buscar usuario por nome: ' + xhr.responseText)
+       	    alert('Erro ao buscar Compra por nome: ' + xhr.responseText)
        	    });
 
     	}
@@ -195,18 +190,18 @@ function buscarUsuario(){
 	
 }
 
-    function ExcluirUserAjax(){
+    function ExcluirCompraAjax(){
 
-    	if(confirm('Confirma exclusao do usuario?')){
+    	if(confirm('Confirma exclusao do Compra?')){
 
-            var urlAction = document.getElementById("formUser").action;
-    	    var idUser = document.getElementById("idUser").value; 
+            var urlAction = document.getElementById("formCompra").action;
+    	    var id = document.getElementById("idCompra").value; 
 
     	    $.ajax({
 
         	    method:"get",
         	    url: urlAction,
-        	    data : "id=" + idUser + "&acao=excluirajax",
+        	    data : "id=" + id + "&acao=excluirajax",
         	    success: function(response){
 
         	    	LimparCampos();
@@ -216,7 +211,7 @@ function buscarUsuario(){
 
 
        	    }).fail(function(xhr, status, erroThrown){
-           	    alert('Erro ao excluir usuario por id: ' + xhr.responseText)
+           	    alert('Erro ao excluir Compra por id: ' + xhr.responseText)
            	    });
 
         	}
@@ -224,11 +219,11 @@ function buscarUsuario(){
     }
 
 
-    function ExcluirUser(){
+    function Excluir(){
         if(confirm('Confirma exclusao?')){
-    	    document.getElementById("formUser").method = 'get';
+    	    document.getElementById("formCompra").method = 'get';
     	    document.getElementById("acao").value = 'excluir';
-    	    document.getElementById("formUser").submit();
+    	    document.getElementById("formCompra").submit();
         }
     }
     
@@ -236,7 +231,7 @@ function buscarUsuario(){
 
     function LimparCampos(){
 
-        var elementos = document.getElementById("formUser").elements; 
+        var elementos = document.getElementById("formCompra").elements; 
         
         for (p = 0; p < elementos.length; p ++){
     	    elementos[p].value = '';

@@ -39,46 +39,36 @@
                                            <div class="col-sm-12">
                                                 <div class="card">
                                                     <div class="card-header">
-                                                        <h5>Cadastro Usuario</h5>
+                                                        <h5>Cadastrar Manutenção</h5>
                                                         <!--<span>Add class of <code>.form-control</code> with <code>&lt;input&gt;</code> tag</span>-->
                                                     </div>
                                                     <div class="card-block">
-                                                        <form class="form-material" action="<%= request.getContextPath() %>/servletUsuarioController" method="post" id="formUser" >
+                                                        <form class="form-material" action="<%= request.getContextPath() %>/servletManutencaoController" method="post" id="formMan" >
 												           	   
 												           	   <input type="hidden" name="acao" id="acao" value="">
 												           	   
 												           	   <div class="form-group form-default form-static-label">
-													           	   <label for="idUser">Cod Usuario</label>
+													           	   <label for="id">Cod Man</label>
 													           	   <span class="form-bar"></span>
-													           	   <input type="text" id="idUser" name="idUser" class="form-control" readonly="readonly" value="${modelLogin.idUser}">
+													           	   <input type="text" id="idMan" name="id" class="form-control" readonly="readonly" value="${manutencao.id}">
 												           	   </div>
 												               <div class="form-group form-default">
-												                   <input type="text" name="nomeUsuario" class="form-control" id="nomeUsuario" value="${modelLogin.nome}">
+												                   <input type="text" name="nome" class="form-control" id="nomeMan" value="${manutencao.nome}">
 												                   <span class="form-bar"></span>
-												                   <label class="float-label">Nome Completo</label>
+												                   <label class="float-label">Nome </label>
 												               </div>
 												               <div class="form-group form-default">
-												                   <input type="text" name="emailUsuario" class="form-control" id="emailUsuario" value="${modelLogin.email}">
+												                   <textarea name="descricao" class="form-control" id="descricaoMan">${manutencao.descricao}</textarea>
 												                   <span class="form-bar"></span>
-												                   <label class="float-label">Email (example@gmail.com)</label>
-												               </div>
-												               <div class="form-group form-default">
-												                   <input type="password" name="senhaUsuario" class="form-control" id="senhaUsuario" value="${modelLogin.senha}">
-												                   <span class="form-bar"></span>
-												                   <label class="float-label">Senha</label>
+												                   <label class="float-label">Descreva a Manutenção</label>
 												               </div>
 												              
-												               <div class="form-group form-default">
-												                   <input type="text" name="loginUsuario" class="form-control" id="loginUsuario" value="${modelLogin.login}">
-												                   <span class="form-bar"></span>
-												                   <label class="float-label">Login</label>
-												               </div>
 												              
 												              <div class="card-block"> 
 												                <button type="button" class="btn waves-effect waves-light btn-grd-primary">Novo</button>
                                                                 <button class="btn waves-effect waves-light btn-grd-info">Salvar</button>                                                               
-                                                                <button type="button" class="btn waves-effect waves-light btn-grd-danger" onclick="ExcluirUserAjax();">Excluir</button>
-													            <button type="button" class="btn waves-effect waves-light btn-grd-warning" data-toggle="modal" data-target="#ModalUsuario">Pesquisar</button>
+                                                                <button type="button" class="btn waves-effect waves-light btn-grd-danger" onclick="ExcluirManAjax();">Excluir</button>
+													            <button type="button" class="btn waves-effect waves-light btn-grd-warning" data-toggle="modal" data-target="#ModalMan">Pesquisar</button>
 												               </div>
 											           </form>
                                                     </div>
@@ -99,11 +89,11 @@
     </div>
     
      <!-- Modal -->
-<div class="modal fade" id="ModalUsuario" tabindex="-1" role="dialog" aria-labelledby="ModalUsuario" aria-hidden="true">
+<div class="modal fade" id="ModalMan" tabindex="-1" role="dialog" aria-labelledby="ModalMan" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="ModalUsuario">Pesquisa de usuario</h5>
+        <h5 class="modal-title" id="ModalMan">Pesquisar Manutenções</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -113,7 +103,7 @@
       	<div class="input-group mb-3">
 		  <input type="text" class="form-control" placeholder="Nome" aria-label="nome" id="nomeBusca" aria-describedby="basic-addon2">
 		  <div class="input-group-append">
-		    <button class="btn btn-success" type="button" onclick="buscarUsuario();">Buscar</button>
+		    <button class="btn btn-success" type="button" onclick="buscarMan();">Buscar</button>
 		  </div>
 		</div>
 		<div style="height:300px; overflow: scroll;">
@@ -147,26 +137,26 @@
 
 function verEditar(id){
 	
-	var urlAction = document.getElementById("formUser").action;
+	var urlAction = document.getElementById("formMan").action;
 
-	window.location.href = urlAction + '?acao=editarUsuario&id='+id;
+	window.location.href = urlAction + '?acao=editarMan&id='+id;
 	
 }
 
 
-function buscarUsuario(){
+function buscarMan(){
 
 	var nomeBusca = document.getElementById("nomeBusca").value;
 
 	if (nomeBusca != null && nomeBusca != '' && nomeBusca.trim() != '' )  { //Validar que o camnpo possue um valor
 
-        var urlAction = document.getElementById("formUser").action;
+        var urlAction = document.getElementById("formMan").action;
 
 	    $.ajax({
 
     	    method:"get",
     	    url: urlAction,
-    	    data : "nomeBusca=" + nomeBusca + "&acao=buscarUsuario",
+    	    data : "nomeBusca=" + nomeBusca + "&acao=buscarMan",
     	    success: function(response){
 
         	    var json = JSON.parse(response);
@@ -177,15 +167,15 @@ function buscarUsuario(){
 
         	    for(var p = 0; p < json.length; p++){
 
-                   $('#tabelaresultados > tbody').append('<tr> <td>'+json[p].idUser+'</td><td>'+json[p].nome+
-                           '</td><td><button onClick="verEditar('+json[p].idUser+')" type="button" class=btn btn-info">Editar</button></td></tr>');
+                   $('#tabelaresultados > tbody').append('<tr> <td>'+json[p].id+'</td><td>'+json[p].nome+
+                           '</td><td><button onClick="verEditar('+json[p].id+')" type="button" class=btn btn-info">Editar</button></td></tr>');
             	}
 
         	    document.getElementById('totalResultados').textContent = 'Resultados: ' + json.length; 
     	    }
 
    	    }).fail(function(xhr, status, erroThrown){
-       	    alert('Erro ao buscar usuario por nome: ' + xhr.responseText)
+       	    alert('Erro ao buscar Manutencão por nome: ' + xhr.responseText)
        	    });
 
     	}
@@ -195,18 +185,18 @@ function buscarUsuario(){
 	
 }
 
-    function ExcluirUserAjax(){
+    function ExcluirManAjax(){
 
-    	if(confirm('Confirma exclusao do usuario?')){
+    	if(confirm('Confirma exclusao da Manutencão?')){
 
-            var urlAction = document.getElementById("formUser").action;
-    	    var idUser = document.getElementById("idUser").value; 
+            var urlAction = document.getElementById("formMan").action;
+    	    var id = document.getElementById("idMan").value; 
 
     	    $.ajax({
 
         	    method:"get",
         	    url: urlAction,
-        	    data : "id=" + idUser + "&acao=excluirajax",
+        	    data : "id=" + id + "&acao=excluirajax",
         	    success: function(response){
 
         	    	LimparCampos();
@@ -216,7 +206,7 @@ function buscarUsuario(){
 
 
        	    }).fail(function(xhr, status, erroThrown){
-           	    alert('Erro ao excluir usuario por id: ' + xhr.responseText)
+           	    alert('Erro ao excluir Manutenção por id: ' + xhr.responseText)
            	    });
 
         	}
@@ -224,11 +214,11 @@ function buscarUsuario(){
     }
 
 
-    function ExcluirUser(){
+    function Excluir(){
         if(confirm('Confirma exclusao?')){
-    	    document.getElementById("formUser").method = 'get';
+    	    document.getElementById("formMan").method = 'get';
     	    document.getElementById("acao").value = 'excluir';
-    	    document.getElementById("formUser").submit();
+    	    document.getElementById("formMan").submit();
         }
     }
     
@@ -236,7 +226,7 @@ function buscarUsuario(){
 
     function LimparCampos(){
 
-        var elementos = document.getElementById("formUser").elements; 
+        var elementos = document.getElementById("formMan").elements; 
         
         for (p = 0; p < elementos.length; p ++){
     	    elementos[p].value = '';

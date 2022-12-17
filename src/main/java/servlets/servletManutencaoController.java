@@ -5,27 +5,27 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import models.ModelLogin;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
+import models.Manutencao;
 
 import java.io.IOException;
 import java.util.List;
 
-import dao.daoUsuarioRepository;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import dao.daoManutencaoRepository;
 
 /**
- * @WebServlet("/servletUsuarioController")
+ * @WebServlet("/servletManutencaoController")
  */
-public class servletUsuarioController extends HttpServlet {
+public class servletManutencaoController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	private daoUsuarioRepository daoUsuario = new daoUsuarioRepository();
+	private daoManutencaoRepository daoMan = new daoManutencaoRepository();
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public servletUsuarioController() {
-//        super();
+    public servletManutencaoController() {
+        super();
         // TODO Auto-generated constructor stub
     }
 
@@ -39,43 +39,43 @@ public class servletUsuarioController extends HttpServlet {
 			
 			if (acao != null && !acao.isEmpty() && acao.equalsIgnoreCase("excluir")) {
 				
-				String idUser = request.getParameter("id");
+				String id = request.getParameter("id");
 								
-				daoUsuario.excluirUser(idUser);
+				daoMan.excluir(id);
 				
-				request.setAttribute("msg", "Usuário excluído");
+				request.setAttribute("msg", "Manutenção excluído");
 				request.getRequestDispatcher("views/principal.jsp").forward(request, response);
 				
 				
 			} else if (acao != null && !acao.isEmpty() && acao.equalsIgnoreCase("excluirajax")) {
 				
-				String idUser = request.getParameter("id");
+				String id = request.getParameter("id");
 				
-				daoUsuario.excluirUser(idUser);
+				daoMan.excluir(id);
 				
-				response.getWriter().write("Usuário Excluído com Sucesso!");
+				response.getWriter().write("Manutenção Excluída com Sucesso!");
 				
-			} else if (acao != null && !acao.isEmpty() && acao.equalsIgnoreCase("buscarUsuario")) {
+			} else if (acao != null && !acao.isEmpty() && acao.equalsIgnoreCase("buscarMan")) {
 				
 				String nomeBusca = request.getParameter("nomeBusca");
 				
-				List<ModelLogin> dadosJsonUser = daoUsuario.consultaUsuarioList(nomeBusca);
+				List<Manutencao> dadosJson = daoMan.consultamanutencaoList(nomeBusca);
 				 
 				ObjectMapper mapper = new ObjectMapper();			
 				
-				String json = mapper.writeValueAsString(dadosJsonUser);
+				String json = mapper.writeValueAsString(dadosJson);
 				
 				response.getWriter().write(json);
 				
-			} else if (acao != null && !acao.isEmpty() && acao.equalsIgnoreCase("editarUsuario")) {
+			} else if (acao != null && !acao.isEmpty() && acao.equalsIgnoreCase("editarMan")) {
 				
 				String  id = request.getParameter("id");
 				
-				ModelLogin modelLogin = daoUsuario.consultaUsuarioID(id);
+				Manutencao manutencao = daoMan.consultamanutencaoID(id);
 				
-				request.setAttribute("msg", "Usuário em modo de edição");
-				request.setAttribute("modelLogin", modelLogin);
-				request.getRequestDispatcher("views/usuarios.jsp").forward(request, response);
+				request.setAttribute("msg", "Manutenção em modo de edição");
+				request.setAttribute("manutencao", manutencao);
+				request.getRequestDispatcher("views/manutencao.jsp").forward(request, response);
 				
 				
 				
@@ -91,7 +91,7 @@ public class servletUsuarioController extends HttpServlet {
 			RequestDispatcher redirecionar = request.getRequestDispatcher("erro.jsp");
 			request.setAttribute("msg", e.getMessage());
 			redirecionar.forward(request, response);		}
-		}
+	}
 
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
@@ -99,41 +99,37 @@ public class servletUsuarioController extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
 		try {
-			String msg = "Usuário Cadastrado";
-			String idUser = request.getParameter("idUser");
-			String nome = request.getParameter("nomeUsuario");
-			String email = request.getParameter("emailUsuario");
-			String login = request.getParameter("loginUsuario");
-			String senha = request.getParameter("senhaUsuario");
+			String msg = "Manutenção Cadastrada";
+			String id = request.getParameter("id");
+			String nome = request.getParameter("nome");
+			String descricao = request.getParameter("descricao");
 			
-			ModelLogin modelLogin = new ModelLogin();
+			Manutencao manutencao = new Manutencao();
 			
-			modelLogin.setIdUser(idUser != null && !idUser.isEmpty() ? Long.parseLong(idUser) : null );
-			modelLogin.setNome(nome);
-			modelLogin.setEmail(email);
-			modelLogin.setLogin(login);
-			modelLogin.setSenha(senha);
+			manutencao.setId(id != null && !id.isEmpty() ? Long.parseLong(id) : null );
+			manutencao.setNome(nome);
+			manutencao.setDescricao(descricao);
+	
 			
-			if (daoUsuario.validarUsuario(login)) {
-				msg = "Usuário já cadastrado. Tente outro";
+			if (daoMan.validarmanutencao(nome)) {
+				msg = "Manutenção já cadastrada. Tente outra";
 			} else { 
-					if (modelLogin.isNovo()) {
-					msg = "Usuário cadastrado.";
+					if (manutencao.isNovo()) {
+					msg = "Manutenção cadastrada.";
 				} else {
-					msg = "Usuário atualizado.";
+					msg = "Manutenção atualizada.";
 				}
-					modelLogin = daoUsuario.gravarUsuario(modelLogin);
+					manutencao = daoMan.gravarmanutencao(manutencao);
 			}
 			
 			request.setAttribute("msg", msg);
-			request.setAttribute("modelLogin", modelLogin);
-			request.getRequestDispatcher("views/usuarios.jsp").forward(request, response);
+			request.setAttribute("manutencao", manutencao);
+			request.getRequestDispatcher("views/manutencao.jsp").forward(request, response);
 		} catch (Exception e) {
 			RequestDispatcher redirecionar = request.getRequestDispatcher("erro.jsp");
 			request.setAttribute("msg", e.getMessage());
 			redirecionar.forward(request, response);
 		}
-		
 	}
 
 }

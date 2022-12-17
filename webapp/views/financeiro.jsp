@@ -39,46 +39,58 @@
                                            <div class="col-sm-12">
                                                 <div class="card">
                                                     <div class="card-header">
-                                                        <h5>Cadastro Usuario</h5>
+                                                        <h5>Cadastro Financeiro</h5>
                                                         <!--<span>Add class of <code>.form-control</code> with <code>&lt;input&gt;</code> tag</span>-->
                                                     </div>
                                                     <div class="card-block">
-                                                        <form class="form-material" action="<%= request.getContextPath() %>/servletUsuarioController" method="post" id="formUser" >
-												           	   
+                                                        
+                                                        <form class="form-material" action="<%= request.getContextPath() %>/servletFinanceiroController" method="post" id="formFinan">	   
+                                                        
 												           	   <input type="hidden" name="acao" id="acao" value="">
 												           	   
 												           	   <div class="form-group form-default form-static-label">
-													           	   <label for="idUser">Cod Usuario</label>
+												           	   <label class="float-label" for="idUser">Cod Conta</label>
 													           	   <span class="form-bar"></span>
-													           	   <input type="text" id="idUser" name="idUser" class="form-control" readonly="readonly" value="${modelLogin.idUser}">
+													           	   <input type="text" id="idFinan" name="id" class="form-control" readonly="readonly" value="${financeiro.id}">
 												           	   </div>
-												               <div class="form-group form-default">
-												                   <input type="text" name="nomeUsuario" class="form-control" id="nomeUsuario" value="${modelLogin.nome}">
-												                   <span class="form-bar"></span>
-												                   <label class="float-label">Nome Completo</label>
+												           	   <div class="form-group form-default">
+												           	       <select class="form-control" id="dropUser" name="idUser">
+												           	       	<option selected>Selecione um Cliente</option>
+												           	       </select>
+												                   	<span class="form-bar"></span>
+												                   	<label class="float-label" for="dropUser">Cliente</label>
 												               </div>
 												               <div class="form-group form-default">
-												                   <input type="text" name="emailUsuario" class="form-control" id="emailUsuario" value="${modelLogin.email}">
+												                   <input type="text" name="nome" class="form-control" id="nomeFinan" value="${financeiro.nome}">
 												                   <span class="form-bar"></span>
-												                   <label class="float-label">Email (example@gmail.com)</label>
+												                   <label class="float-label">Nome Emissor</label>
 												               </div>
 												               <div class="form-group form-default">
-												                   <input type="password" name="senhaUsuario" class="form-control" id="senhaUsuario" value="${modelLogin.senha}">
+												                   <input type="number" name="valor" class="form-control" id="valorFinan" value="${financeiro.valor}">
 												                   <span class="form-bar"></span>
-												                   <label class="float-label">Senha</label>
+												                   <label class="float-label">Qual o valor?</label>
 												               </div>
-												              
 												               <div class="form-group form-default">
-												                   <input type="text" name="loginUsuario" class="form-control" id="loginUsuario" value="${modelLogin.login}">
+												                   <select class="form-control" id="pagamento" name="tipo">
+												                   <option selected >Selecione uma forma de Pagamento</option>
+												                   	<option value="Boleto">Boleto</option>
+												                   	<option value="Cartão">Cartao</option>
+												                   	<option value="pix">Pix</option>
+												                   </select>
 												                   <span class="form-bar"></span>
-												                   <label class="float-label">Login</label>
+												                   <label class="float-label">Tipo de pagamento</label>
+												               </div>
+												               <div class="form-group form-default">
+												                   <textarea name="descricao" class="form-control" id="descricaoFinanceior" placeholder="">${financeiro.descricao}</textarea>
+												                   <span class="form-bar"></span>
+												                   <label class="float-label">Descricao</label>
 												               </div>
 												              
 												              <div class="card-block"> 
 												                <button type="button" class="btn waves-effect waves-light btn-grd-primary">Novo</button>
                                                                 <button class="btn waves-effect waves-light btn-grd-info">Salvar</button>                                                               
-                                                                <button type="button" class="btn waves-effect waves-light btn-grd-danger" onclick="ExcluirUserAjax();">Excluir</button>
-													            <button type="button" class="btn waves-effect waves-light btn-grd-warning" data-toggle="modal" data-target="#ModalUsuario">Pesquisar</button>
+                                                                <button type="button" class="btn waves-effect waves-light btn-grd-danger" onclick="ExcluirFinanceiroAjax();">Excluir</button>
+													            <button type="button" class="btn waves-effect waves-light btn-grd-warning" data-toggle="modal" data-target="#ModalFinanceiro">Pesquisar</button>
 												               </div>
 											           </form>
                                                     </div>
@@ -96,14 +108,13 @@
                 </div>
             </div>
         </div>
-    </div>
     
      <!-- Modal -->
-<div class="modal fade" id="ModalUsuario" tabindex="-1" role="dialog" aria-labelledby="ModalUsuario" aria-hidden="true">
+<div class="modal fade" id="ModalFinanceiro" tabindex="-1" role="dialog" aria-labelledby="ModalFinanceiro" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="ModalUsuario">Pesquisa de usuario</h5>
+        <h5 class="modal-title" id="ModalFinanceiro">Pesquisa de Financeiro</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -113,7 +124,7 @@
       	<div class="input-group mb-3">
 		  <input type="text" class="form-control" placeholder="Nome" aria-label="nome" id="nomeBusca" aria-describedby="basic-addon2">
 		  <div class="input-group-append">
-		    <button class="btn btn-success" type="button" onclick="buscarUsuario();">Buscar</button>
+		    <button class="btn btn-success" type="button" onclick="buscarFinanceiro();">Buscar</button>
 		  </div>
 		</div>
 		<div style="height:300px; overflow: scroll;">
@@ -145,28 +156,54 @@
     
     <script type="text/javascript">
 
+document.addEventListener("DOMContentLoaded", function(event) { 
+	var urlAction = document.getElementById("formFinan").action;
+
+    $.ajax({
+
+	    method:"get",
+	    url: urlAction,
+	    data : "&acao=getUser",
+	    success: function(response){
+	    	var json = JSON.parse(response);
+	    	console.log(json);
+	    	
+	    	
+	    	json.forEach( function(resp){
+	    		$('#dropUser').append('<option value="'+ resp.idUser +'">'+  resp.nome +'</option>');
+	    	})
+	    	
+   	    }
+
+
+	    }).fail(function(xhr, status, erroThrown){
+   	
+	    	return false;
+    });
+});
+    
 function verEditar(id){
 	
-	var urlAction = document.getElementById("formUser").action;
+	var urlAction = document.getElementById("formFinan").action;
 
-	window.location.href = urlAction + '?acao=editarUsuario&id='+id;
+	window.location.href = urlAction + '?acao=editarFinan&id='+id;
 	
 }
 
 
-function buscarUsuario(){
+function buscarFinanceiro(){
 
 	var nomeBusca = document.getElementById("nomeBusca").value;
 
 	if (nomeBusca != null && nomeBusca != '' && nomeBusca.trim() != '' )  { //Validar que o camnpo possue um valor
 
-        var urlAction = document.getElementById("formUser").action;
+        var urlAction = document.getElementById("formFinan").action;
 
 	    $.ajax({
 
     	    method:"get",
     	    url: urlAction,
-    	    data : "nomeBusca=" + nomeBusca + "&acao=buscarUsuario",
+    	    data : "nomeBusca=" + nomeBusca + "&acao=buscarFinan",
     	    success: function(response){
 
         	    var json = JSON.parse(response);
@@ -185,7 +222,7 @@ function buscarUsuario(){
     	    }
 
    	    }).fail(function(xhr, status, erroThrown){
-       	    alert('Erro ao buscar usuario por nome: ' + xhr.responseText)
+       	    alert('Erro ao buscar financeiro por nome: ' + xhr.responseText)
        	    });
 
     	}
@@ -195,18 +232,18 @@ function buscarUsuario(){
 	
 }
 
-    function ExcluirUserAjax(){
+    function ExcluirFinanceiroAjax(){
 
-    	if(confirm('Confirma exclusao do usuario?')){
+    	if(confirm('Confirma exclusao do baixa financeira?')){
 
-            var urlAction = document.getElementById("formUser").action;
-    	    var idUser = document.getElementById("idUser").value; 
+            var urlAction = document.getElementById("formFinan").action;
+    	    var id = document.getElementById("idFinan").value; 
 
     	    $.ajax({
 
         	    method:"get",
         	    url: urlAction,
-        	    data : "id=" + idUser + "&acao=excluirajax",
+        	    data : "id=" + id + "&acao=excluirajax",
         	    success: function(response){
 
         	    	LimparCampos();
@@ -216,7 +253,7 @@ function buscarUsuario(){
 
 
        	    }).fail(function(xhr, status, erroThrown){
-           	    alert('Erro ao excluir usuario por id: ' + xhr.responseText)
+           	    alert('Erro ao excluir baixa financeiro por id: ' + xhr.responseText)
            	    });
 
         	}
@@ -224,11 +261,11 @@ function buscarUsuario(){
     }
 
 
-    function ExcluirUser(){
+    function ExcluirFinanceiro(){
         if(confirm('Confirma exclusao?')){
-    	    document.getElementById("formUser").method = 'get';
+    	    document.getElementById("formFinan").method = 'get';
     	    document.getElementById("acao").value = 'excluir';
-    	    document.getElementById("formUser").submit();
+    	    document.getElementById("formFinan").submit();
         }
     }
     
@@ -236,7 +273,7 @@ function buscarUsuario(){
 
     function LimparCampos(){
 
-        var elementos = document.getElementById("formUser").elements; 
+        var elementos = document.getElementById("formFinan").elements; 
         
         for (p = 0; p < elementos.length; p ++){
     	    elementos[p].value = '';
